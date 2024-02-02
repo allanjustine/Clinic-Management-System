@@ -78,6 +78,11 @@
     <div class="font-sans text-gray-900 antialiased">
         {{ $slot }}
     </div>
+    <style>
+        ul {
+            list-style-type: none !important;
+        }
+    </style>
 </body>
 
 </html>

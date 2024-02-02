@@ -27,7 +27,7 @@ class SmsController extends Controller
         $sent = Nexmo::message()->send([
             'to' => $phoneNumber,
             'from' => $adminNumber,
-            'text' => 'Reminders! Hello Mr/Mrs. ' . $patient->name . ' today is the schedule of your appointment ' . \Carbon\Carbon::parse($patient->date)->format('F d, Y') . ' at ' . \Carbon\Carbon::parse($patient->time)->format('h:i A') .  ' Greetings FROM: ' . $patient->doctor
+            'text' => 'Reminders! Hello Mr/Mrs. ' . $patient->name . ' this is from Espina Eye Care Clinic today is the schedule of your appointment ' . \Carbon\Carbon::parse($patient->date)->format('F d, Y') . ' at ' . \Carbon\Carbon::parse($patient->time)->format('h:i A') .  ' Greetings FROM: ' . $patient->doctor
         ]);
 
         if ($sent['status'] == '0') {

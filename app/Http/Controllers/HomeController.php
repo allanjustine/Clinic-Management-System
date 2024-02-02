@@ -20,9 +20,8 @@ class HomeController extends Controller
                 {
                     $doctor = doctor::all();
 
-                    $doctorName = Doctor::first();
 
-                    return view('user.home',compact('doctor', 'doctorName'));
+                    return view('user.home',compact('doctor'));
 
                 }
                     else
@@ -119,11 +118,12 @@ class HomeController extends Controller
 
                 if(Auth::user()->usertype==0)
                 {
+                    $doctorName = Doctor::first();
 
                       $userid = Auth::user()->id;
                 $appoint=Appointment::where('user_id',$userid)->get();
 
-                return view('user.my_appointment',compact('appoint'));
+                return view('user.my_appointment',compact('appoint', 'doctorName'));
 
                 }else{
                     return redirect()->back();

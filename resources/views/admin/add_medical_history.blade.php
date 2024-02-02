@@ -27,12 +27,7 @@
         <div class="container-fluid page-body-wrapper">
 
             <div class="container" align="center" style="padding-top:100px;">
-                <h1 class="mb-5" style="font-size: 30px;">Adding medical history to <u>{{ $appoint->first_name }}
-                        @if ($appoint->middle_name)
-                            <span class="uppercase">{{ $appoint->middle_name }}</span>.
-                            @endif {{ $appoint->last_name }}@if ($appoint->extension)
-                                , <span class="capitalize">{{ $appoint->extension }}</span>
-                            @endif
+                <h1 class="mb-5" style="font-size: 30px;">Adding medical history to <u>{{ $appoint->name }}
                     </u>
                 </h1>
                 @if (session()->has('message'))

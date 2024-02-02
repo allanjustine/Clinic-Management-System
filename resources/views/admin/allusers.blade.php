@@ -59,8 +59,10 @@
                             <td>{{ $user->phone }}</td>
                             <td>{{ $user->address }}</td>
                             <td>
-                                @if ($user->user_type == 0)
-                                    <span class="badge rounded-pill badge-primary text-bg-primary">User</span>
+                                @if ($user->usertype == 0)
+                                    <span class="badge rounded-pill badge-primary text-bg-primary">Patients</span>
+                                @else
+                                    <span class="badge rounded-pill badge-info text-bg-info">Secretary/Doctor</span>
                                 @endif
                             </td>
                             <td>

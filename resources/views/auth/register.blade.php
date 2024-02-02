@@ -15,6 +15,7 @@
                     <x-jet-label for="name" value="{{ __('Full name') }}" />
                     <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name"
                         :value="old('name')" required autofocus autocomplete="name" />
+
                 </div>
                 <div class="col-4">
                     <x-jet-label for="suffix" value="{{ __('Suffix (Optional)') }}" />

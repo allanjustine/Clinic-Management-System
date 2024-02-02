@@ -33,7 +33,8 @@
 
         <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="#"><span class="text-primary">Espina Eye Care</a>
+                <img src="{{ asset('../assets/img/custom-logo.jpg') }}" alt="Custom Logo"
+                    style="border-radius: 50%; width: 90px; height: 70px;">
 
 
 
@@ -67,7 +68,7 @@
                                     <a class="nav-link" href="/about">About Us</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/send-feedback">Send Feedback</a>
+                                    <a class="nav-link" href="/send-feedback">Submit Feedback</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="btn btn-primary ml-lg-3" href="{{ route('login') }}">Login/Register </a>
@@ -160,6 +161,35 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <div class="page-section">
+        <div class="container mt-5">
+            <h1 class="text-center mb-2" style="font-size: 30px;">Testimonials</h1>
+            <hr>
+        </div>
+        <div class="container mt-2">
+            <div class="row">
+                <div class="col-md-8 mx-auto">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <img src="images/profile.png" alt="image" class="img-fluid rounded-circle">
+                                </div>
+                                <div class="col-md-8">
+                                    <blockquote class="blockquote mb-0">
+                                        <p>"I am extremely satisfied with the service I received. The team was very
+                                            professional and helpful throughout the process."</p>
+                                        <footer class="blockquote-footer">Allan Justine Mascariñas</footer>
+                                    </blockquote>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

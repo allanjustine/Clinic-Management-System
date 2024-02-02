@@ -287,7 +287,7 @@ class AdminController extends Controller
     public function allUsers()
     {
 
-        $data = User::where('usertype', '!=', 1)->orderBy('created_at', 'desc')->get();
+        $data = User::where('usertype', '!=', 1)->orWhere('id', '!=', 1)->orderBy('created_at', 'desc')->get();
 
 
         /////////////

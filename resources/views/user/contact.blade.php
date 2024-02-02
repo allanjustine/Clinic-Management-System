@@ -33,7 +33,8 @@
 
         <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="#"><span class="text-primary">Espina Eye Care</a>
+                <img src="{{ asset('../assets/img/custom-logo.jpg') }}" alt="Custom Logo"
+                    style="border-radius: 50%; width: 90px; height: 70px;">
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupport"
                     aria-controls="navbarSupport" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,7 +66,7 @@
                                     <a class="nav-link" href="/about">About Us</a>
                                 </li>
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="/send-feedback">Send Feedback</a>
+                                    <a class="nav-link" href="/send-feedback">Submit Feedback</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="btn btn-primary ml-lg-3" href="{{ route('login') }}">Login/Register </a>
@@ -91,7 +92,7 @@
     <div class="page-section">
         <div class="container">
             <h1 class="text-center wow fadeInUp">Send feedback to us!</h1>
-            <span class="text-center mt-3 text-danger"><x-jet-validation-errors class="mb-4" /></span>
+            {{-- <span class="text-center mt-3 text-danger"><x-jet-validation-errors class="mb-4" /></span> --}}
             <form class="contact-form mt-5" action="{{ url('contact') }}" method="POST">
                 @csrf
                 <div class="row mb-3">
@@ -100,12 +101,19 @@
                         <input type="text" id="name" name="name"
                             value="{{ auth()->check() ? auth()->user()->name : '' }}" class="form-control"
                             placeholder="Full name..">
+
+                        @error('name')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="col-sm-6 py-2 wow fadeInRight">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email"
                             value="{{ auth()->check() ? auth()->user()->email : '' }}" class="form-control"
                             placeholder="Email address..">
+                        @error('email')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="col-12 py-2 wow fadeInUp">
                         <label for="subject">Type</label>
@@ -117,17 +125,24 @@
                             <option value="Wait Times">Wait Times</option>
                             <option value="Cleanliness and Comfort">Cleanliness and Comfort</option>
                             <option value="Effectiveness of Examinations">Effectiveness of Examinations</option>
-                            <option value="Billing and Administrative Processes">Billing and Administrative Processes</option>
+                            <option value="Billing and Administrative Processes">Billing and Administrative Processes
+                            </option>
                             <option value="About the System">About the System</option>
                             <option value="About the Doctor">About the Doctor</option>
                             <option value="Content Accuracy and Relevance">Content Accuracy and Relevance</option>
                             <option value="Appointment Booking Process">Appointment Booking Process</option>
                             <option value="Appointment Scheduling Process">Appointment Scheduling Process</option>
                         </select>
+                        @error('type')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="col-12 py-2 wow fadeInUp">
                         <label for="message">Message</label>
                         <textarea id="message" class="form-control" name="message" rows="8" placeholder="Enter Message.."></textarea>
+                        @error('message')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary wow zoomIn">Send Message</button>
@@ -203,6 +218,12 @@
     <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAIA_zqjFMsJM_sxP9-6Pde5vVCTyJmUHM&callback=initMap"></script>
 
+
+    <style>
+        ul {
+            list-style-type: none;
+        }
+    </style>
 </body>
 
 </html>

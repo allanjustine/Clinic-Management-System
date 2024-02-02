@@ -86,8 +86,10 @@
             My Appointments
         </h1>
     </div>
-
-
+    @include('user.appointment')
+    <div class="container d-flex justify-content-end">
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add New Appointment</a>
+    </div>
     <div align="center" style="padding:70px;">
         <table class="table table-dark">
             <tr align="center">
@@ -110,10 +112,10 @@
                     </td>
                     <td style="padding:10px; color:white;">{{ $appoints->doctor }}</td>
                     <td style="padding:10px; color:white;">
-                        {{ $appoints->status == 'Canceled' ? 'Rejected' : $appoints->status }}</td>
+                        {{ $appoints->status == 'Canceled' ? 'Rejected' : 'Confirmed' }}</td>
                     <td>
                         @if ($appoints->status == 'Approved')
-                            <div class="btn btn-outline-success">Approved</div>
+                            <div class="btn btn-outline-success">Confirmed</div>
                         @elseif($appoints->status == 'Canceled')
                             <div class="btn btn-outline-danger">Rejected</div>
                             <a href="#" class="btn btn-info" data-bs-toggle="modal"

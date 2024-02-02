@@ -105,7 +105,7 @@
                 <span class="menu-icon">
                     <i class="mdi mdi-doctor"></i>
                 </span>
-                <span class="menu-title">All Doctors</span>
+                <span class="menu-title">Doctor Information</span>
             </a>
         </li>
         <li class="nav-item menu-items">

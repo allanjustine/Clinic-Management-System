@@ -34,7 +34,8 @@
 
         <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="#"><span class="text-primary">Espina Eye Care</a>
+                <img src="{{ asset('../assets/img/custom-logo.jpg') }}" alt="Custom Logo"
+                    style="border-radius: 50%; width: 90px; height: 70px;">
 
 
 
@@ -76,7 +77,7 @@
                                 <a class="nav-link" href="/blog">News</a>
                             </li> --}}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/send-feedback">Send Feedback</a>
+                                    <a class="nav-link" href="/send-feedback">Submit Feedback</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="btn btn-primary ml-lg-3" href="{{ route('login') }}">Login/Register </a>
@@ -170,7 +171,7 @@
                             <div class="circle-shape bg-accent text-white">
                                 <span class="mai-location"></span>
                             </div>
-                            <p><span>Espina</span>Eye Care Clinic</p>
+                            <p><span>Espina</span> Eye Care Clinic</p>
                         </div>
                     </div>
                 </div>
@@ -203,7 +204,6 @@
     <!-- .page-section -->
     {{-- @include('user.latest') --}}
     <!-- appointment part -->
-    @include('user.appointment')
     <!-- .page-section -->
     <!-- banner part delete korbo -->
     <!-- .banner-home -->

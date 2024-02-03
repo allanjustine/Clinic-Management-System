@@ -170,28 +170,7 @@
             <h1 class="text-center mb-2" style="font-size: 30px;">Testimonials</h1>
             <hr>
         </div>
-        <div class="container mt-2">
-            <div class="row">
-                <div class="col-md-8 mx-auto">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <img src="images/profile.png" alt="image" class="img-fluid rounded-circle">
-                                </div>
-                                <div class="col-md-8">
-                                    <blockquote class="blockquote mb-0">
-                                        <p>"I am extremely satisfied with the service I received. The team was very
-                                            professional and helpful throughout the process."</p>
-                                        <footer class="blockquote-footer">Allan Justine Mascariñas</footer>
-                                    </blockquote>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('user.testimony')
     </div>
 
     <div class="page-section">

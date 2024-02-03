@@ -92,3 +92,7 @@ Route::post('/add-medical-history',[AdminController::class,'addedMedical']);
 Route::get('/print-details/{id}',[AdminController::class,'print']);
 
 Route::get('/sms/{id}',[SmsController::class,'index']);
+Route::get('/testimonies',[HomeController::class,'testimony']);
+Route::post('/testimonies-add',[HomeController::class,'addTestimony']);
+Route::put('/testimonies-edit/{id}',[HomeController::class,'updateTest']);
+Route::delete('/testimonies-delete/{id}',[HomeController::class,'testDelete']);

@@ -117,6 +117,15 @@
             </a>
         </li>
         <li class="nav-item menu-items">
+            <a class="nav-link" href="{{ url('testimonies') }}">
+                <span class="menu-icon">
+                    <i class="mdi mdi-account-star"></i>
+                </span>
+                <span class="menu-title">All Testimonies</span>
+            </a>
+        </li>
+        </li>
+        <li class="nav-item menu-items">
             <a class="nav-link" href="{{ url('feedbacks') }}">
                 <span class="menu-icon">
                     <i class="mdi mdi-clock"></i>

@@ -24,7 +24,7 @@ class CreateNewUser implements CreatesNewUsers
             'gender' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
             'age' => ['required', 'numeric', 'max:99', 'min:1'],
-            'phone' => ['required', 'numeric', 'regex:/^9\d{9}$/'],
+            'phone' => ['required', 'numeric', 'regex:/^9\d{9}$/', 'digits:10'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
         ])->validate();

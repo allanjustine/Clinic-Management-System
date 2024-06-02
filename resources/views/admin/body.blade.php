@@ -81,7 +81,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+            <div class="col-xl-3 col-sm-6 grid-margin stretch-card" {{ auth()->user()->userType != 1 ? 'hidden' : ''  }}>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -101,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+            <div class="col-xl-3 col-sm-6 grid-margin stretch-card" {{ auth()->user()->userType != 1 ? 'hidden' : ''  }}>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -121,7 +121,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+            <div class="col-xl-3 col-sm-6 grid-margin stretch-card" {{ auth()->user()->userType != 1 ? 'hidden' : ''  }}>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -161,11 +161,7 @@
                                 <tbody>
                                     @forelse ($approved as $appoint)
                                         <tr align="center">
-                                            <td>{{ $appoint->first_name }} @if ($appoint->middle_name)
-                                                    <span class="uppercase">{{ $appoint->middle_name }}</span>.
-                                                    @endif {{ $appoint->last_name }}@if ($appoint->extension)
-                                                        , <span class="capitalize">{{ $appoint->extension }}</span>
-                                                    @endif
+                                            <td>{{ $appoint->name }}
                                             </td>
                                             <td>{{ $appoint->phone }}</td>
                                             <td>{{ $appoint->email }}</td>

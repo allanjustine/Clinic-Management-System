@@ -18,6 +18,7 @@ class CreateAppointmentsTable extends Migration
             $table->string('name')->nullable();
             $table->string('gender')->nullable();
             $table->string('age')->nullable();
+            $table->string('appoint_for')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('doctor')->nullable();

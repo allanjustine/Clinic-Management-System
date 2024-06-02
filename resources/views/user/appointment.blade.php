@@ -11,20 +11,16 @@
                 <div class="modal-body">
                     <div class="row mt-5 ">
                         <div class="col-12 py-2 wow fadeInLeft">
-                            <input type="text" name="name" class="form-control" placeholder="Full name"
-                                value="{{ auth()->user()->name }} {{ auth()->user()->suffix }}" readonly>
+                            <input type="text" name="name" class="form-control" placeholder="Full name" value="{{ auth()->user()->name }}">
                         </div>
                         <div class="col-12 col-sm-6 py-2 wow fadeInLeft">
-                            <input type="number" name="age" class="form-control" min="1" placeholder="Age"
-                                value="{{ auth()->user()->age }}" readonly>
+                            <input type="number" name="age" class="form-control" min="1" placeholder="Age" value="{{ auth()->user()->age }}">
                         </div>
                         <div class="col-12 col-sm-6 py-2 wow fadeInLeft">
-                            <input type="text" name="gender" class="form-control" min="1"
-                                placeholder="Gender" value="{{ auth()->user()->gender }}" readonly>
+                            <input type="text" name="gender" class="form-control" min="1" placeholder="Gender" value="{{ auth()->user()->gender }}">
                         </div>
                         <div class="col-12 col-sm-6 py-2 wow fadeInRight">
-                            <input type="email" name="email" class="form-control" placeholder="Email address.."
-                                value="{{ auth()->user()->email }}" readonly>
+                            <input type="email" name="email" class="form-control" placeholder="Email address.." value="{{ auth()->user()->email }}">
                         </div>
                         {{-- <div class="col-12 col-sm-6 py-2 wow fadeInRight" data-wow-delay="300ms">
         <select name="doctor" id="departement" class="custom-select">
@@ -35,65 +31,94 @@
 
           <option value=" {{$doctors->name }}"> {{$doctors->name }}--speciality-- {{$doctors->speciality}}</option>
 
-          @endforeach
-        </select>
-        </div> --}}
-                        <div class="col-12 col-sm-6 py-2 wow fadeInUp" data-wow-delay="300ms">
-                            <input type="text" min="1" name="number" class="form-control"
-                                placeholder="Phone number (Sample: 9XXXXXXXXX)" value="{{ auth()->user()->phone }}"
-                                readonly>
-                        </div>
-
-                        <div class="col-12 py-2 wow fadeInLeft" data-wow-delay="300ms">
-                            <label for="date">Select date of Appointment</label>
-                            <input type="date" name="date" class="form-control" value="{{ old('date') }}">
-                            @error('date')
-                                <p class="text-danger">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        @endforeach
+                        </select>
+                    </div> --}}
+                    <div class="col-12 col-sm-6 py-2 wow fadeInUp" data-wow-delay="300ms">
+                        <input type="text" min="1" name="number" class="form-control" placeholder="Phone number (Sample: 9XXXXXXXXX)" value="{{ auth()->user()->phone }}">
+                    </div>
+                    <div class="col-12 py-2 wow fadeInUp" data-wow-delay="300ms">
+                        <select name="appointment_for" id="" class="form-control">
+                            <option value="" selected hidden>Appointment For?</option>
+                            <option disabled>Appointment For?</option>
+                            <option value="My Self">My Self</option>
+                            <option value="My Child">My Child</option>
+                            <option value="My Sister">My Sister</option>
+                            <option value="My Brother">My Brother</option>
+                            <option value="My Cousin">My Cousin</option>
+                            <option value="My Mother">My Mother</option>
+                            <option value="My Father">My Father</option>
+                            <option value="My Uncle">My Uncle</option>
+                            <option value="My Auntie">My Auntie</option>
+                            <option value="My Friend">My Friend</option>
+                        </select>
+                        @error('appointment_for')
+                        <p class="text-danger">{{ $message }}</p>
+                        @enderror
                     </div>
 
-                    @if ($doctorName)
-                        <input type="text" value="{{ $doctorName->name }}" hidden name="doctor">
-                    @endif
-
-
+                    <div class="col-12 py-2 wow fadeInLeft" data-wow-delay="300ms">
+                        <label for="date">Select date of Appointment</label>
+                        <input type="date" name="date" class="form-control" value="{{ old('date') }}">
+                        @error('date')
+                        <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    @php
-                        $userAppointments = auth()->user()->appointments;
-                        $pendingAppointments = $userAppointments->filter(function ($appointment) {
-                            return $appointment->status == 'In progress';
-                        });
-                    @endphp
+                <input type="text" value="{{ $doctorName->name }}" hidden name="doctor">
+                {{-- <div class="col-12 py-2 wow fadeInLeft" data-wow-delay="300ms">
+                    <label for="doctor">Select Doctor</label>
+                    <select name="doctor" id="" class="form-control">
+                        <option value="" selected hidden>Select Doctor</option>
+                        <option disabled>Select Doctor</option>
+                        @forelse($doctorName as $doctor)
+                        <option value="{{ $doctor->name }}">{{ $doctor->name }}</option>
+                        @empty
+                        <option>No Doctors Available</option>
+                        @endforelse
+                    </select>
+                    @error('doctor')
+                        <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                </div> --}}
 
-                    @if ($doctorName == null)
-                        <span class="text-danger">You can't submit an appointment request if the doctor information
-                            above in
-                            this form is still loading, please wait. It
-                            indicates that no doctor is currently available at this time. Kindly try again later, and
-                            keep
-                            refreshing the page until a doctor becomes available. Thank you for your
-                            understanding!</span>
 
-                        <br>
-
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-success" disabled>Submit Request</button>
-                    @elseif ($pendingAppointments->isNotEmpty())
-                        <span class="text-danger">You have pending appointments, and you can't submit another
-                            one.</span>
-                        <br>
-
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button class="btn btn-success" disabled>Submit Request</button>
-                    @else
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary mt-3 wow zoomIn">Submit Request</button>
-                    @endif
-                </div>
             </div>
+            <div class="modal-footer">
+                @php
+                $userAppointments = auth()->user()->appointments;
+                $pendingAppointments = $userAppointments->filter(function ($appointment) {
+                return $appointment->status == 'In progress';
+                });
+                @endphp
 
-        </form>
+                @if ($doctorName == null)
+                <span class="text-danger">You can't submit an appointment request if the doctor information
+                    above in
+                    this form is still loading, please wait. It
+                    indicates that no doctor is currently available at this time. Kindly try again later, and
+                    keep
+                    refreshing the page until a doctor becomes available. Thank you for your
+                    understanding!</span>
+
+                <br>
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-success" disabled>Submit Request</button>
+                @elseif ($pendingAppointments->isNotEmpty())
+                <span class="text-danger">You have pending appointments, and you can't submit another
+                    one.</span>
+                <br>
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-success" disabled>Submit Request</button>
+                @else
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary wow zoomIn">Submit Request</button>
+                @endif
+            </div>
     </div>
+
+    </form>
+</div>
 </div>

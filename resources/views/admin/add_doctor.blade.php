@@ -21,7 +21,7 @@
                     <div class="form-group row">
                         <label for="phone" class="col-sm-3 col-form-label">Phone</label>
                         <div class="col-sm-9">
-                            <input type="number" name="phone" class="form-control" placeholder="Write the phone no"
+                            <input type="number" name="phone" class="form-control" placeholder="Write the phone no (9XXXXXXXXX)"
                                 value="{{ old('phone') }}">
                         </div>
                     </div>

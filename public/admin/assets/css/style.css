@@ -10095,7 +10095,7 @@ input[type="button"].btn-block {
   flex-direction: column;
   align-items: flex-start;
   justify-content: center; }
-  
+
   .btn-group-vertical > .btn,
   .fc .btn-group-vertical > button,
   .ajax-upload-dragdrop .btn-group-vertical > .ajax-file-upload,
@@ -10442,7 +10442,7 @@ input[type="button"].btn-block {
   .asColorPicker-wrap > .custom-select:not(:first-child) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0; }
-  
+
   .input-group > .custom-file,
   .asColorPicker-wrap > .custom-file {
     display: flex;
@@ -15282,7 +15282,7 @@ a.text-dark:hover, a.text-dark:focus {
     border: 1px solid #000; }
   .table, .jsgrid .jsgrid-table {
     border-collapse: collapse !important; }
-    
+
     .table td,
     .jsgrid .jsgrid-table td, .table th, .jsgrid .jsgrid-table th {
       background-color: #ffffff !important; }
@@ -16935,7 +16935,7 @@ code {
   .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .jsgrid .jsgrid-table .jsgrid-filter-row input:focus[type=number], .select2-container--default .select2-selection--single:focus, .select2-container--default .select2-selection--single .select2-search__field:focus, .typeahead:focus,
   .tt-query:focus,
   .tt-hint:focus {
-    border: 1px solid rgba(71, 164, 71, 0.5);
+    color: #ffffff;
     background-color: #2A3038; }
   .form-control.form-control-lg, .form-control-lg.asColorPicker-input, .dataTables_wrapper select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=text],
   .jsgrid .jsgrid-table .jsgrid-filter-row select.form-control-lg, .jsgrid .jsgrid-table .jsgrid-filter-row input.form-control-lg[type=number], .select2-container--default .form-control-lg.select2-selection--single, .select2-container--default .select2-selection--single .form-control-lg.select2-search__field, .form-control-lg.typeahead,

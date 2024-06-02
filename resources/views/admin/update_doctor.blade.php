@@ -55,7 +55,7 @@
                     <div class="form-group row">
                         <label for="phone" class="col-sm-3 col-form-label">Phone:</label>
                         <div class="col-sm-9">
-                            <input type="number" class="form-control" name="phone" value="{{ $data->phone }}">
+                            <input type="number" class="form-control" placeholder="(9XXXXXXXXX)" name="phone" value="{{ $data->phone }}">
                         </div>
                     </div>
 

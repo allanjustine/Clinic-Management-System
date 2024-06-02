@@ -18,11 +18,10 @@
 
                     </div>
 
-                    <div class="form-group row">
+                    <div class="form-group row" hidden>
                         <label for="suffix" class="col-sm-3 col-form-label">Suffix (Optional):</label>
                         <div class="col-sm-9">
-                            <select id="suffix" class="block mt-1 form-control" type="text"
-                                name="suffix"autofocus autocomplete="suffix">
+                            <select id="suffix" class="block mt-1 form-control" type="text" name="suffix" autofocus autocomplete="suffix">
                                 <option value="">-- Select Suffix (Optional) --</option>
                                 <option value="Jr">Jr</option>
                                 <option value="Sr">Sr</option>
@@ -42,7 +41,7 @@
                     <div class="form-group row">
                         <label for="phone" class="col-sm-3 col-form-label">Phone:</label>
                         <div class="col-sm-9">
-                            <input type="number" class="form-control" name="phone" value="{{ old('phone') }}">
+                            <input type="number" class="form-control" placeholder="9XXXXXXXXX" name="phone" value="{{ old('phone') }}">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -68,19 +67,56 @@
                             <input type="text" class="form-control" name="address" value="{{ old('address') }}">
                         </div>
                     </div>
+                    @if(auth()->user()->usertype == 3)
+                    <input type="text" hidden value="0" name="usertype">
+                    @else
+                    <div class="form-group row">
+                        <label for="usertype" class="col-sm-3 col-form-label">Select Role:</label>
+                        <div class="col-sm-9">
+                            <select name="usertype" id="" class="form-control">
+                                <option selected value="" hidden>Select Role</option>
+                                <option disabled>Select Role</option>
+                                <option value="0">Patient</option>
+                                <option value="1">Admin</option>
+                                <option value="2">Doctor</option>
+                                <option value="3">Secretary</option>
+                            </select>
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="form-group row">
                         <label for="password" class="col-sm-3 col-form-label">Password:</label>
                         <div class="col-sm-9">
-                            <input type="password" class="form-control" name="password" value="{{ old('password') }}">
+                            <input type="password" id="password" class="form-control" name="password" value="{{ old('password') }}">
+
+                            <input type="checkbox" id="showPassword" type="checkbox" class="form-checkbox text-gray-400">
+                            <label for="showPassword" class="ml-2 text-sm text-gray-600">{{ __('Show Password') }}</label>
+                            <script>
+                                document.getElementById('showPassword').addEventListener('change', function() {
+                                    var passwordInput = document.getElementById('password');
+                                    var type = this.checked ? 'text' : 'password';
+                                    passwordInput.setAttribute('type', type);
+                                });
+
+                            </script>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="password_confirmation" class="col-sm-3 col-form-label">Password
                             confirmation:</label>
                         <div class="col-sm-9">
-                            <input type="password" class="form-control" name="password_confirmation"
-                                value="{{ old('password_confirmation') }}">
+                            <input type="password" class="form-control" id="password2" name="password_confirmation" value="{{ old('password_confirmation') }}">
+                            <input type="checkbox" id="showPassword2" type="checkbox" class="form-checkbox text-gray-400">
+                            <label for="showPassword2" class="ml-2 text-sm text-gray-600">{{ __('Show Password') }}</label>
+                            <script>
+                                document.getElementById('showPassword2').addEventListener('change', function() {
+                                    var passwordInput2 = document.getElementById('password2');
+                                    var type = this.checked ? 'text' : 'password';
+                                    passwordInput2.setAttribute('type', type);
+                                });
+
+                            </script>
                         </div>
                     </div>
 
@@ -91,6 +127,7 @@
                             <input type="file" class="form-control" name="file">
                         </div>
                     </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

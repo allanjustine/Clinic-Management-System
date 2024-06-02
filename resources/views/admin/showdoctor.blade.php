@@ -25,7 +25,7 @@
             @endif
             <x-jet-validation-errors class="mb-4 text-center" />
             <div class="container">
-                <button type="button" class="btn btn-primary mb-2 mt-5 float-end" data-bs-toggle="modal" data-bs-target="#add">
+                <button {{ $data->isEmpty() ? '' : 'hidden' }} type="button" class="btn btn-primary mb-2 mt-5 float-end" data-bs-toggle="modal" data-bs-target="#add">
                     <span class="mdi mdi-plus"></span> Add Doctor
                 </button>
             </div>

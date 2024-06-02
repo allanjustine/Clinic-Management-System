@@ -39,7 +39,8 @@
 
 <nav class="navbar navbar-expand-lg navbar-light shadow-sm">
     <div class="container">
-        <a class="navbar-brand" href="#"><span class="text-primary">Espina Eye Care</a>
+        <a class="navbar-brand brand-logo-mini" href="/home"><img src="{{ asset('../assets/img/custom-logo.jpg') }}"
+            alt="Custom Logo" style="border-radius: 50%; width: 50px; height: 50px;"></a>
 
 
 
@@ -63,7 +64,7 @@
               <a class="nav-link" href="/blog">News</a>
             </li> --}}
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact">Contact</a>
+                    <a class="nav-link" href="/send-feedback">Submit Feedback</a>
                 </li>
                 <li class="nav-item">
                     <a class="btn btn-primary ml-lg-3" href="{{ route('login') }}">Login/Register </a>

@@ -11,6 +11,7 @@
             width: 200px;
 
         }
+
     </style>
 
     @include('admin.css')
@@ -40,8 +41,7 @@
                                 <div class="row mt-3">
                                     <div class="col-md-6 d-flex">
                                         <div class="img-fluid">
-                                            <img src="{{ asset('../assets/img/custom-logo.jpg') }}"
-                                                class="rounded-circle" style="width:150px; height: 150px;">
+                                            <img src="{{ asset('../assets/img/custom-logo.jpg') }}" class="rounded-circle" style="width:150px; height: 150px;">
                                         </div>
                                         <address class="mt-5">
                                             <h1 class="card-title"><strong>ESPINA EYE CARE CLINIC</strong></h1>
@@ -56,15 +56,12 @@
                                     <div class="col-md-6 pr-10">
                                         <div class="mt-5 " style="text-align: right ;margin-right: 40px;">
 
-                                            <b>Invoice #<span
-                                                    id="inv-no">{{ rand(1000000, 9999999) }}</span></b><br><br>
+                                            <b>Invoice #<span id="inv-no">{{ rand(1000000, 9999999) }}</span></b><br><br>
                                             <b>Invoice To: </b><span id="customer">{{ $appoint->name }}
                                             </span><br>
                                             <b>Appointment ID: </b><span id="app-code">{{ $appoint->id }}</span><br>
-                                            <b>Appointment Date: </b><span
-                                                id="app-date">{{ $appoint->created_at->format('F d, Y') }}</span><br>
-                                            <b>Appointment Time: </b><span
-                                                id="app-date">{{ \Carbon\Carbon::parse($appoint->time)->format('h:i A') }}</span><br>
+                                            <b>Appointment Date: </b><span id="app-date">{{ $appoint->created_at->format('F d, Y') }}</span><br>
+                                            <b>Appointment Time: </b><span id="app-date">{{ \Carbon\Carbon::parse($appoint->time)->format('h:i A') }}</span><br>
 
                                         </div>
 
@@ -112,6 +109,7 @@
                                         </thead>
 
                                         <tbody>
+                                            @forelse($histories as $history)
                                             <tr>
                                                 <td>{{ $history ? $history->id : 'N/A' }}</td>
                                                 <td>{{ $history ? $history->appointment->name : 'N/A' }}</td>
@@ -121,16 +119,32 @@
                                                 <td>{{ $history ? $history->va : 'N/A' }}</td>
                                                 <td>{{ $history ? $history->add_or_va : 'N/A' }}</td>
                                             </tr>
+                                            @empty
+                                            <tr>
+                                                <td>N/A</td>
+                                                <td>N/A</td>
+                                                <td>N/A</td>
+                                                <td>N/A</td>
+                                                <td>N/A</td>
+                                                <td>N/A</td>
+                                                <td>N/A</td>
+                                            </tr>
+                                            @endforelse
                                         </tbody>
 
                                     </table>
                                 </div>
-                                Remarks: <u>{{ $history ? $history->remarks : 'N/A' }}</u>
+                                @forelse($histories as $history)
+                                <u>
+                                    <p><strong>Remarks: </strong>{{ $history ? $history->remarks : 'N/A' }}</p>
+                                </u>
+                                @empty
+                                <u>N/A</u>
+                                @endforelse
 
                             </div>
                             <div class="card-footer" id="hide-on-print" style="text-align: end;">
-                                <h4><a href="/showappointment" onclick="window.print()"
-                                        class="btn btn-warning text-dark"><span class="mdi mdi-eye"></span>
+                                <h4><a href="/showappointment" onclick="window.print()" class="btn btn-warning text-dark"><span class="mdi mdi-eye"></span>
                                         PRINT</a></h4>
                             </div>
 
@@ -142,7 +156,8 @@
                 </div>
                 <!-- /.col -->
             </div>
-    </div><!--/. container-fluid -->
+    </div>
+    <!--/. container-fluid -->
     </section>
     <!-- /.content -->
     </div>
@@ -153,6 +168,7 @@
                 display: none;
             }
         }
+
     </style>
 
     <!-- container-scroller -->

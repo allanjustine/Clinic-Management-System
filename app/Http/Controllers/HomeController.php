@@ -18,7 +18,7 @@ class HomeController extends Controller
 
         if (Auth::id()) {
             if (Auth::user()->usertype == '0') {
-                $doctor = doctor::all();
+                $doctor = Doctor::all();
 
 
                 return view('user.home', compact('doctor'));
@@ -60,6 +60,7 @@ class HomeController extends Controller
             'gender' => ['required'],
             'email' => ['required', 'email'],
             'number' => ['required', 'numeric'],
+            'appointment_for' => ['required'],
         ]);
 
         $data = new Appointment;
@@ -68,6 +69,7 @@ class HomeController extends Controller
         $data->gender = $request->gender;
         $data->email = $request->email;
         $data->date = $request->date;
+        $data->appointment_for = $request->appointment_for;
         $data->phone = $request->number;
         $data->status = 'In progress';
         $data->doctor = $request->doctor;

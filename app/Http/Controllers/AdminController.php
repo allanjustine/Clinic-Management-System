@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\PasswordValidationRules;
 use Notification;
 use App\Models\Doctor;
 use App\Models\MedicalHistory;
@@ -12,6 +13,10 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\SendEmailNotification;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Nexmo\Laravel\Facade\Nexmo;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -70,7 +75,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'name'  =>  'required',
-            'phone'  =>  'required',
+            'phone' => ['required', 'numeric', 'regex:/^9\d{9}$/', 'digits:10'],
             'file'  =>  'required',
             'speciality'  =>  'required',
         ]);
@@ -81,7 +86,7 @@ class AdminController extends Controller
         $request->file->move('doctorimage', $imagename);
         $doctor->image = $imagename;
         $doctor->name = $request->name;
-        $doctor->phone = $request->phone;
+        $doctor->phone = "+63" . $request->phone;
         $doctor->speciality = $request->speciality;
 
         $doctor->save();
@@ -95,13 +100,13 @@ class AdminController extends Controller
             'email'     =>      'required|email|unique:users,email',
             'name'     =>      'required',
             'age'     =>      'required|min:1|max:99|numeric',
-            'suffix'     =>      'required',
             'gender'     =>      'required',
             'file'     =>      'required',
-            'phone' => ['required', 'numeric', 'regex:/^9\d{9}$/'],
+            'phone' => ['required', 'numeric', 'regex:/^9\d{9}$/', 'digits:10'],
             'address'     =>      'required',
             'password'     =>      'required|confirmed|min:8',
             'file'     =>      'required',
+            'usertype'     =>      'required',
         ]);
         $user = new User;
         $profile_photo_path = $request->file;
@@ -110,14 +115,13 @@ class AdminController extends Controller
         $request->file->move('userimage', $imagename);
         $user->profile_photo_path = $imagename;
         $user->name = $request->name;
-        $user->suffix = $request->suffix;
         $user->age = $request->age;
         $user->gender = $request->gender;
         $user->email = $request->email;
         $user->phone = "+63" . $request->phone;
         $user->address = $request->address;
         $user->email_verified_at = now();
-        $user->usertype = 0;
+        $user->usertype = $request->usertype;
         $user->password = bcrypt($request->password);
 
         $user->save();
@@ -144,6 +148,7 @@ class AdminController extends Controller
             });
         }
 
+
         $usersWithAppointments = $query->orderBy('created_at', 'desc')->get();
 
 
@@ -151,9 +156,10 @@ class AdminController extends Controller
         /////////////
         if (Auth::id()) {
 
-            if (Auth::user()->usertype == 1) {
+            if (Auth::user()->usertype == 1 || Auth::user()->usertype == 2 || Auth::user()->usertype == 3) {
+                $users = User::all();
 
-                return view('admin.showappointment', compact('usersWithAppointments', 'searchQ'));
+                return view('admin.showappointment', compact('usersWithAppointments', 'searchQ', 'users'));
             } else {
 
                 return redirect()->back();
@@ -171,14 +177,42 @@ class AdminController extends Controller
 
     public function approved(Request $request, $id)
     {
-        $request->validate([
-            'time'  => ['required', 'after_or_equal:now']
-        ]);
+        $appointmentDateTime = Carbon::parse($request->date . ' ' . $request->time);
+
+        if ($appointmentDateTime->isPast()) {
+            return back()->with('error', 'The appointment time must be in the future.');
+        }
+
+        $existingAppointment = Appointment::where('date', $request->date)
+            ->where('time', $request->time)
+            ->first();
+
+        if ($existingAppointment) {
+            return back()->with('error', 'The appointment time is already taken.');
+        }
         $data = Appointment::find($id);
         $data->status = 'Approved';
         $data->time = $request->time;
-        $data->created_at = now();
-        $data->save();
+
+        $phoneNumber = $data->phone;
+        $adminNumber = auth()->user()->phone;
+
+        $sent = Nexmo::message()->send([
+            'to' => $phoneNumber,
+            'from' => $adminNumber,
+            'text' => 'Reminders! Hello Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and your appointment was successfully approved and your appointment schedule is on ' . \Carbon\Carbon::parse($data->date)->format('F d, Y') . ' at ' . \Carbon\Carbon::parse($data->time)->format('h:i A') .  ' Greetings FROM: ' . $data->doctor
+        ]);
+
+        if ($sent['status'] == '0') {
+
+            $data->sms_status = true;
+            $data->save();
+
+            return back()->with('message', 'Appointment was approved and message was sent successfully');
+        } else {
+            return back()->with('error', 'Failed to approve and send message. Please try again.');
+        };
+
         return redirect()->back();
     }
 
@@ -191,8 +225,24 @@ class AdminController extends Controller
         $data = Appointment::find($id);
         $data->status = 'Canceled';
         $data->reason = $request->reason;
-        $data->created_at = now();
-        $data->save();
+        $phoneNumber = $data->phone;
+        $adminNumber = auth()->user()->phone;
+
+        $sent = Nexmo::message()->send([
+            'to' => $phoneNumber,
+            'from' => $adminNumber,
+            'text' => 'Good day! Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and we inform you that your appointment was rejected reason: ' . $data->reason . ' but you can request another appointment. Thank you! ' .  ' Greetings FROM: ' . $data->doctor
+        ]);
+
+        if ($sent['status'] == '0') {
+
+            $data->sms_status = true;
+            $data->save();
+
+            return back()->with('message', 'Appointment was approved and message was sent successfully');
+        } else {
+            return back()->with('error', 'Failed to approve and send message. Please try again.');
+        };
         return redirect()->back();
     }
 
@@ -205,7 +255,7 @@ class AdminController extends Controller
         /////////////
         if (Auth::id()) {
 
-            if (Auth::user()->usertype == 1) {
+            if (Auth::user()->usertype == 1 || Auth::user()->usertype == 2) {
 
                 return view('admin.showdoctor', compact('data'));
             } else {
@@ -324,17 +374,32 @@ class AdminController extends Controller
 
         return view('admin.update_user', compact('data'));
     }
-
     public function edituser(Request $request, $id)
     {
+
         $user = User::find($id);
         $user->name = $request->name;
         $user->age = $request->age;
         $user->gender = $request->gender;
         $user->email = $request->email;
         $user->phone = $request->phone;
+        $user->usertype = $request->usertype;
         $user->address = $request->address;
-        $user->suffix = $request->suffix;
+
+        if ($request->current_password) {
+            $request->validate([
+                'current_password' => ['required', 'string', 'min:8'],
+                'new_password' => ['required', 'confirmed', 'min:8'],
+            ]);
+
+            if (!Hash::check($request->current_password, $user->password)) {
+                return back()->with('error', 'Current password is incorrect');
+            }
+
+            if ($request->new_password) {
+                $user->password = Hash::make($request->new_password);
+            }
+        }
 
         $profile_photo_path = $request->file;
 
@@ -383,6 +448,39 @@ class AdminController extends Controller
 
     }
 
+    public function walkinPatient(Request $request)
+    {
+        $request->validate([
+            'name' => ['required'],
+            'age' => ['required', 'numeric', 'min:1', 'max:99'],
+            'gender' => ['required'],
+            'time' => ['required', 'after_or_equal:' . now()->format('g:i A'), 'unique:appointments,time'],
+            'email' => ['required', 'email'],
+            'phone' => ['required'],
+            'patient_account' => ['required'],
+        ]);
+
+        $data = new Appointment;
+        $data->name = $request->name;
+        $data->age = $request->age;
+        $data->gender = $request->gender;
+        $data->email = $request->email;
+        $data->phone = $request->phone;
+        $data->appointment_for = $request->appointment_for;
+        $data->date = now();
+        $data->time = $request->time;
+        $data->status = 'Approved';
+        $data->doctor = $request->doctor;
+        $data->user_id = $request->patient_account;
+        // if(Auth::id())
+        // {
+
+        //     $data->user_id=Auth::user()->id;
+        // }
+        $data->save();
+        return redirect()->back()->with('message', 'Walk-in Consultation added successfully');
+    }
+
     public function addAppointment(Request $request)
     {
 
@@ -390,9 +488,9 @@ class AdminController extends Controller
             'name' => ['required'],
             'age' => ['required', 'numeric', 'min:1', 'max:99'],
             'gender' => ['required'],
-            'time' => ['required', 'after_or_equal:now'],
+            'time' => ['required', 'after_or_equal:' . now()->format('g:i A'), 'unique:appointments,time'],
             'email' => ['required', 'email'],
-            'phone' => ['required', 'numeric'],
+            'phone' => ['required'],
             'user_id' => ['required'],
         ]);
 
@@ -401,13 +499,13 @@ class AdminController extends Controller
         $data->age = $request->age;
         $data->gender = $request->gender;
         $data->email = $request->email;
-        $data->date = now();
-        $data->time = now();
         $data->phone = $request->phone;
-        $data->status = 'Approved';
-        $data->doctor= $request->doctor;
-        $data->user_id = $request->user_id;
+        $data->appointment_for = $request->appointment_for;
+        $data->date = now();
         $data->time = $request->time;
+        $data->status = 'Approved';
+        $data->doctor = $request->doctor;
+        $data->user_id = $request->user_id;
         // if(Auth::id())
         // {
 
@@ -415,6 +513,19 @@ class AdminController extends Controller
         // }
         $data->save();
         return redirect()->back()->with('message', 'Appointment added successfully');
+    }
+
+    public function deleteMedicalHistory($id)
+    {
+        $deleteMedicalHistory = MedicalHistory::find($id);
+
+        if (!$deleteMedicalHistory) {
+            return back()->with('error', 'Medical history not found');
+        } else {
+            $deleteMedicalHistory->delete();
+
+            return back()->with('message', 'Medical history deleted successfully.');
+        }
     }
 
     public function patientsDetails(Request $request, $id)
@@ -453,13 +564,15 @@ class AdminController extends Controller
     public function addMedical($id)
     {
 
-        $appoint = Appointment::find($id);
+        $user = User::find($id);
+
+        $appointments = Appointment::where('user_id', $user->id)->where('time', '!=', null)->get();
 
         if (Auth::id()) {
 
-            if (Auth::user()->usertype == 1) {
+            if (Auth::user()->usertype == 1 || Auth::user()->usertype == 2) {
 
-                return view('admin.add_medical_history', compact('appoint'));
+                return view('admin.add_medical_history', compact('user', 'appointments'));
             } else {
 
                 return redirect()->back();
@@ -482,6 +595,7 @@ class AdminController extends Controller
             'va' => ['required'],
             'add_or_va' => ['required'],
             'remarks' => ['required'],
+            'appointment_id' => ['required']
         ]);
 
         $data = new MedicalHistory;
@@ -494,21 +608,21 @@ class AdminController extends Controller
         $data->user_id = $request->user_id;
         $data->appointment_id = $request->appointment_id;
         $data->save();
-        return redirect('/patients-details/'. $data->appointment->user->id)->with('message', 'Medical history was added successfully');
+        return redirect('/patients-details/' . $data->appointment->user->id)->with('message', 'Medical history was added successfully');
     }
 
     public function print($id)
     {
         $appoint = Appointment::find($id);
 
-        $history = MedicalHistory::where('appointment_id', $appoint->id)->first();
+        $histories = MedicalHistory::where('appointment_id', $appoint->id)->get();
 
 
         if (Auth::id()) {
 
-            if (Auth::user()->usertype == 1) {
+            if (Auth::user()->usertype == 1 || Auth::user()->usertype == 2) {
 
-                return view('admin.print_details', compact('appoint', 'history'));
+                return view('admin.print_details', compact('appoint', 'histories'));
             } else {
 
                 return redirect()->back();

@@ -66,6 +66,15 @@
                     <h6 class="text-center">{{ session()->get('message') }}</h6>
                 </div>
             @endif
+            @if (session()->has('error'))
+                <div class="alert alert-danger mt-5">
+                    <button type="button" class="close" data-dismiss="alert">
+                        Cut
+                    </button>
+
+                    <h6 class="text-center">{{ session()->get('error') }}</h6>
+                </div>
+            @endif
             <x-jet-validation-errors class="mb-4 text-center" />
             <div class="container">
                 <button type="button" class="btn btn-primary mb-2 mt-5 float-end" data-bs-toggle="modal"

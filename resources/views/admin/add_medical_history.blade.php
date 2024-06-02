@@ -27,7 +27,7 @@
         <div class="container-fluid page-body-wrapper">
 
             <div class="container" align="center" style="padding-top:100px;">
-                <h1 class="mb-5" style="font-size: 30px;">Adding medical history to <u>{{ $appoint->name }}
+                <h1 class="mb-5" style="font-size: 30px;">Adding medical history to <u>{{ $user->name }}
                     </u>
                 </h1>
                 @if (session()->has('message'))
@@ -45,6 +45,20 @@
                 <form action="/add-medical-history" method="POST">
                     @csrf
 
+                    <div class="form-group row">
+                        <label for="appointment_id" class="col-sm-3 col-form-label">Select Date of Appointment</label>
+                        <div class="col-sm-9">
+                            <select name="appointment_id" id="" class="form-control">
+                                <option selected hidden value="">Select Date of Appointment</option>
+                                <option disabled>Select Date of Appointment</option>
+                                @forelse($appointments as $appointment)
+                                    <option value="{{ $appointment->id }}">{{ $appointment->created_at->format('M d, Y') }} @ {{ \Carbon\Carbon::parse($appointment->time)->format('g:i A') }}</option>
+                                @empty
+                                <option selected>This user is no appointment or not approve yet.</option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="sphere" class="col-sm-3 col-form-label">SPHERE</label>
                         <div class="col-sm-9">
@@ -88,8 +102,8 @@
                                 value="{{ old('remarks') }}">
                         </div>
                     </div>
-                    <input type="text" hidden value="{{ $appoint->id }}" name="appointment_id">
-                    <input type="text" hidden value="{{ $appoint->user->id }}" name="user_id">
+                    <input type="text" hidden value="{{ $user->id }}" name="user_id">
+                    {{-- <input type="text" hidden value="{{ $appoint->user->id }}" name="user_id"> --}}
 
 
                     <div class="form-group row">

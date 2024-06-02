@@ -100,7 +100,7 @@
             </a>
         </li>
 
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" {{ auth()->user()->usertype == 3 ? 'hidden' : ''  }}>
             <a class="nav-link" href="{{ url('showdoctor') }}">
                 <span class="menu-icon">
                     <i class="mdi mdi-doctor"></i>
@@ -108,7 +108,7 @@
                 <span class="menu-title">Doctor Information</span>
             </a>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" {{ auth()->user()->usertype != 1 ? 'hidden' : ''  }}>
             <a class="nav-link" href="{{ url('users') }}">
                 <span class="menu-icon">
                     <i class="mdi mdi-account-group"></i>
@@ -116,7 +116,7 @@
                 <span class="menu-title">All Users</span>
             </a>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" {{ auth()->user()->usertype != 1 ? 'hidden' : ''  }}>
             <a class="nav-link" href="{{ url('testimonies') }}">
                 <span class="menu-icon">
                     <i class="mdi mdi-account-star"></i>
@@ -125,7 +125,7 @@
             </a>
         </li>
         </li>
-        <li class="nav-item menu-items">
+        <li class="nav-item menu-items" {{ auth()->user()->usertype != 1 ? 'hidden' : ''  }}>
             <a class="nav-link" href="{{ url('feedbacks') }}">
                 <span class="menu-icon">
                     <i class="mdi mdi-clock"></i>

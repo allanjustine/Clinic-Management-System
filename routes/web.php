@@ -57,6 +57,8 @@ Route::get('/showappointment',[AdminController::class,'showappointment']);
 
 Route::post('/approved/{id}',[AdminController::class,'approved']);
 
+Route::post('/walkin/patients',[AdminController::class,'walkinPatient']);
+
 Route::get('/verified/{id}',[AdminController::class,'directVerified']);
 
 Route::post('/canceled/{id}',[AdminController::class,'canceled']);
@@ -90,6 +92,8 @@ Route::get('/add-medical-history/{id}',[AdminController::class,'addMedical']);
 Route::post('/add-medical-history',[AdminController::class,'addedMedical']);
 
 Route::get('/print-details/{id}',[AdminController::class,'print']);
+
+Route::delete('/delete-medical-history/{id}', [AdminController::class, 'deleteMedicalHistory']);
 
 Route::get('/sms/{id}',[SmsController::class,'index']);
 Route::get('/testimonies',[HomeController::class,'testimony']);

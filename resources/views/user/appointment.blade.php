@@ -17,7 +17,14 @@
                             <input type="number" name="age" class="form-control" min="1" placeholder="Age" value="{{ auth()->user()->age }}">
                         </div>
                         <div class="col-12 col-sm-6 py-2 wow fadeInLeft">
-                            <input type="text" name="gender" class="form-control" min="1" placeholder="Gender" value="{{ auth()->user()->gender }}">
+                            {{-- <input type="text" name="gender" class="form-control" min="1" placeholder="Gender" value="{{ auth()->user()->gender }}"> --}}
+                            <select name="gender" id="" class="form-control">
+                                <option value="" selected hidden>Select Gender</option>
+                                <option disabled>Select Gender</option>
+                                <option value="Male" {{ auth()->user()->gender == 'Male' ? 'selected' : '' }}>Male</option>
+                                <option value="Female" {{ auth()->user()->gender == 'Female' ? 'selected' : '' }}>Female</option>
+                                <option value="Other" {{ auth()->user()->gender == 'Other' ? 'selected' : '' }}>Other</option>
+                            </select>
                         </div>
                         <div class="col-12 col-sm-6 py-2 wow fadeInRight">
                             <input type="email" name="email" class="form-control" placeholder="Email address.." value="{{ auth()->user()->email }}">

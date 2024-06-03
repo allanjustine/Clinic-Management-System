@@ -84,7 +84,10 @@
                                         </thead>
                                         <tbody>
                                             <tr class="text-white">
-                                                <td>{{ $appoint->name }}</td>
+                                                <td>
+                                                    <p>{{ $appoint->name }}</p>
+                                                    <p class="text-sm text-muted italic">({{ $appoint->appointment_for }})</p>
+                                                </td>
                                                 <td>{{ $appoint->phone }}</td>
                                                 <td>{{ $appoint->email }}</td>
                                                 <td>{{ $appoint->created_at->format('F d, Y') }}</td>

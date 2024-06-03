@@ -157,7 +157,7 @@ class AdminController extends Controller
         if (Auth::id()) {
 
             if (Auth::user()->usertype == 1 || Auth::user()->usertype == 2 || Auth::user()->usertype == 3) {
-                $users = User::all();
+                $users = User::orderBy('name', 'asc')->get();
 
                 return view('admin.showappointment', compact('usersWithAppointments', 'searchQ', 'users'));
             } else {
@@ -465,7 +465,7 @@ class AdminController extends Controller
         $data->age = $request->age;
         $data->gender = $request->gender;
         $data->email = $request->email;
-        $data->phone = $request->phone;
+        $data->phone = "+63" . $request->phone;
         $data->appointment_for = $request->appointment_for;
         $data->date = now();
         $data->time = $request->time;

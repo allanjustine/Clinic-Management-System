@@ -83,7 +83,8 @@
                         </tr>
                         @forelse ($data->appointments as $appoint)
                         <tr align="center">
-                            <td><p><strong>{{ $appoint->name }}</strong></p>
+                            <td>
+                                <p><strong>{{ $appoint->name }}</strong></p>
                                 <p class="text-sm text-muted italic">({{ $appoint->appointment_for }})</p>
                             </td>
                             <td>{{ $appoint->phone }}</td>
@@ -93,6 +94,7 @@
                             </td>
                             <td>{{ $appoint->status }}</td>
                             <td>
+                                @if(auth()->user()->usertype != 3)
                                 @if ($appoint->status == 'In progress')
                                 <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approved{{ $appoint->id }}">Approved</a>
 
@@ -116,6 +118,9 @@
                                 <button type="submit" class="btn btn-warning">Send SMS</button>
                                 </form>
                                 @endif --}}
+                                @endif
+                                @else
+                                <div class="btn btn-info">{{ $appoint->status }}</div>
                                 @endif
 
                                 {{-- <a href="{{ url('emailview', $appoint->id) }}" class="btn btn-primary">Send
@@ -235,7 +240,9 @@
                         <td>{{ $history->axis }}</td>
                         <td>{{ $history->va }}</td>
                         <td>{{ $history->add_or_va }}</td>
-                        <td>{{ $history->remarks }}</td>
+                        <td title="{{ $history->remarks }}">
+                            {{ \Illuminate\Support\Str::limit($history->remarks, 20) }}
+                        </td>
                         <td>
                             <form action="/delete-medical-history/{{ $history->id }}" method="POST">
                                 @csrf

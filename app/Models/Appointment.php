@@ -12,6 +12,8 @@ class Appointment extends Model
 
     use Notifiable;
 
+    protected $guarded = [];
+
     public function user()
     {
         return $this->belongsTo(User::class);

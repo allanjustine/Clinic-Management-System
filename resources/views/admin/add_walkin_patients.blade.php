@@ -24,6 +24,21 @@
                             </select>
                         </div>
                     </div>
+                    <input type="date" value="{{ now() }}" name="date" hidden>
+                    <div class="form-group row">
+                        <label for="doctor_id" class="col-sm-3 col-form-label">Select a doctor</label>
+                        <div class="col-sm-9">
+                            <select name="doctor_id" id="" class="form-control">
+                                <option value="" selected hidden>Select a doctor</option>
+                                <option disabled>Select a doctor</option>
+                                @forelse($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                @empty
+                                    <option value="" selected>No doctors yet.</option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label for="name" class="col-sm-3 col-form-label">Name</label>
                         <div class="col-sm-9">

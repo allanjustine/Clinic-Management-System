@@ -41,6 +41,7 @@
                         {{ session()->get('message') }}
                     </div>
                 @endif
+                <x-jet-validation-errors class="mb-4 text-center" />
                 <form action="{{ url('editdoctor', $data->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -62,8 +63,12 @@
                     <div class="form-group row">
                         <label for="speciality" class="col-sm-3 col-form-label">Speciality:</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" name="speciality"
-                                value="{{ $data->speciality }}">
+                            
+                            <select class="form-control" name="speciality">
+                                <option value="" hidden selected>Select Speciality</option>
+                                <option disabled>Select Speciality</option>
+                                <option value="Eye" {{ $data->speciality == 'Eye' ? 'selected' : '' }}>Eye</option>
+                            </select>
                         </div>
                     </div>
 

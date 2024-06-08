@@ -10,7 +10,21 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" hidden name="user_id" value="{{ $data->id }}">
-
+                    <div class="form-group row">
+                        <label for="doctor_id" class="col-sm-3 col-form-label">Select a doctor</label>
+                        <div class="col-sm-9">
+                            <select name="doctor_id" id="" class="form-control">
+                                <option value="" selected hidden>Select a doctor</option>
+                                <option disabled>Select a doctor</option>
+                                @forelse($doctors as $doctor)
+                                    <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                @empty
+                                    <option value="" selected>No doctors yet.</option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
+                    <input type="date" value="{{ now() }}" name="date" hidden>
                     <div class="form-group row">
                         <label for="name" class="col-sm-3 col-form-label">Name</label>
                         <div class="col-sm-9">
@@ -57,9 +71,7 @@
                         </div>
                     </div>
 
-                    @if ($doctorName)
-                        <input type="text" value="{{ $doctorName->name }}" hidden name="doctor">
-                    @endif
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

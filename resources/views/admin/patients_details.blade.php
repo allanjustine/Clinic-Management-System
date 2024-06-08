@@ -72,8 +72,8 @@
                 <div align="center">
                     <table class="table">
                         <tr style="background-color:black;" align="center">
-                            <th>Patients Name</th>
-                            <th>Phone</th>
+                            <th>Patients Details</th>
+                            <th>Assigned Doctor</th>
                             <th>Email</th>
                             <th>Date</th>
                             <th>Time</th>
@@ -81,13 +81,14 @@
                             <th>Action</th>
 
                         </tr>
-                        @forelse ($data->appointments as $appoint)
+                        @forelse ($data->appointments->sortByDesc('created_at') as $appoint)
                         <tr align="center">
                             <td>
                                 <p><strong>{{ $appoint->name }}</strong></p>
                                 <p class="text-sm text-muted italic">({{ $appoint->appointment_for }})</p>
+                                <p class="text-sm">{{ $appoint->phone }}</p>
                             </td>
-                            <td>{{ $appoint->phone }}</td>
+                            <td class="{{ $appoint->doctor->name ?? 'text-danger' }}">{{ $appoint->doctor->name ?? 'No doctor selected yet.' }}</td>
                             <td>{{ $appoint->email }}</td>
                             <td>{{ \Carbon\Carbon::parse($appoint->date)->format('F d, Y') }}</td>
                             <td>{{ $appoint->time ? \Carbon\Carbon::parse($appoint->time)->format('h:i A') : 'N/A' }}
@@ -96,10 +97,10 @@
                             <td>
                                 @if(auth()->user()->usertype != 3)
                                 @if ($appoint->status == 'In progress')
-                                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approved{{ $appoint->id }}">Approved</a>
+                                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approved{{ $appoint->id }}">Approve</a>
 
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#reject{{ $appoint->id }}" class="btn btn-danger">Reject</a>
-                                @elseif($appoint->status == 'Canceled')
+                                @elseif($appoint->status == 'Rejected')
                                 <div class="badge badge-outline-danger">Canceled</div>
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#reason{{ $appoint->id }}" class="btn btn-info">Show
                                     Reason</a>
@@ -109,7 +110,7 @@
                                 {{-- @if ($appoint->medicalHistories->isEmpty())
                                             <a href="/add-medical-history/{{ $appoint->id }}"
                                 class="badge badge-info">
-                                <span class="mdi mdi-plus"></span> Add Medical History
+                                <span class="mdi mdi-plus"></span> Add New Prescription
                                 </a>
                                 @endif --}}
                                 {{-- @if (now()->isSameDay($appoint->date) && $appoint->sms_status == false)
@@ -141,6 +142,20 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             <div class="modal-body">
+                                                <div class="form-group row">
+                                                    <label for="doctor_id" class="col-sm-3 col-form-label">Select a Doctor</label>
+                                                    <div class="col-sm-9">
+                                                        <select name="doctor_id" id="" class="form-control">
+                                                            <option value="" hidden selected>Select a Doctor</option>
+                                                            <option disabled>Select a Doctor</option>
+                                                            @forelse($doctors as $doctor)
+                                                                <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
+                                                            @empty
+                                                                <option value="">No doctor available</option>
+                                                            @endforelse
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group row">
                                                     <label for="time" class="col-sm-3 col-form-label">Time</label>
                                                     <div class="col-sm-9">
@@ -215,8 +230,8 @@
             </div>
             <hr>
             @if(auth()->user()->id != 3)
-            <h3 class="mt-5" style="font-size: 30px">Medical History</h3>
-            <a href="/add-medical-history/{{ $data->id }}" class="float-end btn btn-info mb-3"><i class="mdi mdi-plus"></i> Add Medical History </a>
+            <h3 class="mt-5" style="font-size: 30px">Prescription</h3>
+            <a href="/add-medical-history/{{ $data->id }}" class="float-end btn btn-info mb-3"><i class="mdi mdi-plus"></i> Add New Prescription </a>
             <div align="center">
                 <table class="table mt-2">
                     <tr style="background-color:black;" align="center">
@@ -253,7 +268,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="text-center">No medical history added yet!</td>
+                        <td colspan="9" class="text-center">No prescription added yet!</td>
                     </tr>
                     @endforelse
 

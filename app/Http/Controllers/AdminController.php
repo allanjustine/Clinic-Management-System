@@ -77,7 +77,7 @@ class AdminController extends Controller
             'name'  =>  'required',
             'phone' => ['required', 'numeric', 'regex:/^9\d{9}$/', 'digits:10'],
             'file'  =>  'required',
-            'speciality'  =>  'required',
+            'speciality'  =>  'required|in:Eye',
         ]);
         $doctor = new Doctor;
         $image = $request->file;
@@ -158,8 +158,9 @@ class AdminController extends Controller
 
             if (Auth::user()->usertype == 1 || Auth::user()->usertype == 2 || Auth::user()->usertype == 3) {
                 $users = User::orderBy('name', 'asc')->get();
+                $doctors = Doctor::all();
 
-                return view('admin.showappointment', compact('usersWithAppointments', 'searchQ', 'users'));
+                return view('admin.showappointment', compact('usersWithAppointments', 'searchQ', 'users', 'doctors'));
             } else {
 
                 return redirect()->back();
@@ -183,16 +184,24 @@ class AdminController extends Controller
             return back()->with('error', 'The appointment time must be in the future.');
         }
 
-        $existingAppointment = Appointment::where('date', $request->date)
+        // $existingAppointment = Appointment::where('date', $request->date)
+        //     ->where('time', $request->time)
+        //     ->first();
+        $existingDoctor = Appointment::where('date', $request->date)
             ->where('time', $request->time)
+            ->where('doctor_id', $request->doctor_id)
             ->first();
 
-        if ($existingAppointment) {
-            return back()->with('error', 'The appointment time is already taken.');
+        // if ($existingAppointment) {
+        //     return back()->with('error', 'The appointment time is already taken.');
+        // }
+        if ($existingDoctor) {
+            return back()->with('error', 'This time is already occupied by the doctor.');
         }
         $data = Appointment::find($id);
         $data->status = 'Approved';
         $data->time = $request->time;
+        $data->doctor_id = $request->doctor_id;
 
         $phoneNumber = $data->phone;
         $adminNumber = auth()->user()->phone;
@@ -200,7 +209,7 @@ class AdminController extends Controller
         $sent = Nexmo::message()->send([
             'to' => $phoneNumber,
             'from' => $adminNumber,
-            'text' => 'Reminders! Hello Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and your appointment was successfully approved and your appointment schedule is on ' . \Carbon\Carbon::parse($data->date)->format('F d, Y') . ' at ' . \Carbon\Carbon::parse($data->time)->format('h:i A') .  ' Greetings FROM: ' . $data->doctor
+            'text' => 'Reminders! Hello Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and your appointment was successfully approved and your appointment schedule is on ' . \Carbon\Carbon::parse($data->date)->format('F d, Y') . ' at ' . \Carbon\Carbon::parse($data->time)->format('h:i A') .  ' Greetings FROM: ' . $data->doctor->name
         ]);
 
         if ($sent['status'] == '0') {
@@ -231,7 +240,7 @@ class AdminController extends Controller
         $sent = Nexmo::message()->send([
             'to' => $phoneNumber,
             'from' => $adminNumber,
-            'text' => 'Good day! Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and we inform you that your appointment was rejected reason: ' . $data->reason . ' but you can request another appointment. Thank you! ' .  ' Greetings FROM: ' . $data->doctor
+            'text' => 'Good day! Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and we inform you that your appointment was rejected reason: ' . $data->reason . ' but you can request another appointment. Thank you! ' .  ' Greetings FROM: ' . $data->doctor->name
         ]);
 
         if ($sent['status'] == '0') {
@@ -288,6 +297,9 @@ class AdminController extends Controller
 
     public function editdoctor(Request $request, $id)
     {
+        $request->validate([
+            'speciality' => 'in:Eye'
+        ]);
         $doctor = Doctor::find($id);
         $doctor->name = $request->name;
         $doctor->phone = $request->phone;
@@ -454,11 +466,21 @@ class AdminController extends Controller
             'name' => ['required'],
             'age' => ['required', 'numeric', 'min:1', 'max:99'],
             'gender' => ['required'],
-            'time' => ['required', 'after_or_equal:' . now()->format('g:i A'), 'unique:appointments,time'],
+            'time' => ['required', 'after_or_equal:' . now()->format('g:i A')],
             'email' => ['required', 'email'],
             'phone' => ['required'],
             'patient_account' => ['required'],
+            'doctor_id' => ['required']
         ]);
+
+        $existingDoctor = Appointment::where('date', $request->date)
+            ->where('time', $request->time)
+            ->where('doctor_id', $request->doctor_id)
+            ->exists();
+
+        if ($existingDoctor) {
+            return back()->with('error', 'The selected time slot is already taken by this doctor.');
+        }
 
         $data = new Appointment;
         $data->name = $request->name;
@@ -467,10 +489,10 @@ class AdminController extends Controller
         $data->email = $request->email;
         $data->phone = "+63" . $request->phone;
         $data->appointment_for = $request->appointment_for;
-        $data->date = now();
+        $data->date = $request->date;
         $data->time = $request->time;
         $data->status = 'Approved';
-        $data->doctor = $request->doctor;
+        $data->doctor_id = $request->doctor_id;
         $data->user_id = $request->patient_account;
         // if(Auth::id())
         // {
@@ -488,11 +510,21 @@ class AdminController extends Controller
             'name' => ['required'],
             'age' => ['required', 'numeric', 'min:1', 'max:99'],
             'gender' => ['required'],
-            'time' => ['required', 'after_or_equal:' . now()->format('g:i A'), 'unique:appointments,time'],
+            'time' => ['required', 'after_or_equal:' . now()->format('g:i A')],
             'email' => ['required', 'email'],
             'phone' => ['required'],
             'user_id' => ['required'],
+            'doctor_id' => ['required'],
         ]);
+
+        $existingDoctor = Appointment::where('date', $request->date)
+            ->where('time', $request->time)
+            ->where('doctor_id', $request->doctor_id)
+            ->exists();
+
+        if ($existingDoctor) {
+            return back()->with('error', 'The selected time slot is already taken by this doctor.');
+        }
 
         $data = new Appointment;
         $data->name = $request->name;
@@ -501,10 +533,10 @@ class AdminController extends Controller
         $data->email = $request->email;
         $data->phone = $request->phone;
         $data->appointment_for = $request->appointment_for;
-        $data->date = now();
+        $data->date = $request->date;
         $data->time = $request->time;
         $data->status = 'Approved';
-        $data->doctor = $request->doctor;
+        $data->doctor_id = $request->doctor_id;
         $data->user_id = $request->user_id;
         // if(Auth::id())
         // {
@@ -532,7 +564,7 @@ class AdminController extends Controller
     {
         $data = User::with('appointments')->find($id);
 
-        $doctorName = Doctor::first();
+        $doctors = Doctor::all();
 
         $medicalHistories = collect();
 
@@ -558,7 +590,7 @@ class AdminController extends Controller
         }
 
 
-        return view('admin.patients_details', compact('data', 'searchTerm', 'medicalHistories', 'doctorName'));
+        return view('admin.patients_details', compact('data', 'searchTerm', 'medicalHistories', 'doctors'));
     }
 
     public function addMedical($id)

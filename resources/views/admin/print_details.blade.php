@@ -74,8 +74,8 @@
                                     <table id="example1" class="table">
                                         <thead>
                                             <tr>
-                                                <th>Patients Name</th>
-                                                <th>Phone</th>
+                                                <th>Patients Details</th>
+                                                <th>Assigned Doctor</th>
                                                 <th>Email</th>
                                                 <th>Date</th>
                                                 <th>Time</th>
@@ -87,8 +87,9 @@
                                                 <td>
                                                     <p>{{ $appoint->name }}</p>
                                                     <p class="text-sm text-muted italic">({{ $appoint->appointment_for }})</p>
+                                                    <p class="text-sm">{{ $appoint->phone }}</p>
                                                 </td>
-                                                <td>{{ $appoint->phone }}</td>
+                                                <td>{{ $appoint->doctor->name }}</td>
                                                 <td>{{ $appoint->email }}</td>
                                                 <td>{{ $appoint->created_at->format('F d, Y') }}</td>
                                                 <td>{{ \Carbon\Carbon::parse($appoint->time)->format('h:i A') }}</td>

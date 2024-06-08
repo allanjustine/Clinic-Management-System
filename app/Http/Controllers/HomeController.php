@@ -72,7 +72,6 @@ class HomeController extends Controller
         $data->appointment_for = $request->appointment_for;
         $data->phone = $request->number;
         $data->status = 'In progress';
-        $data->doctor = $request->doctor;
         if (Auth::id()) {
 
             $data->user_id = Auth::user()->id;

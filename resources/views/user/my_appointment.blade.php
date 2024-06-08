@@ -96,12 +96,12 @@
             <tr align="center">
                 <th style="padding:10px; font-size:20px; color:white;">Date</th>
                 <th style="padding:10px; font-size:20px; color:white;">Time</th>
-                <th style="padding:10px; font-size:20px; color:white;">Doctor</th>
+                <th style="padding:10px; font-size:20px; color:white;">My Doctor</th>
                 <th style="padding:10px; font-size:20px; color:white;">Status</th>
                 <th style="padding:10px; font-size:20px; color:white;">Action</th>
             </tr>
 
-            @forelse ($appoint as $appoints)
+            @forelse ($appoint->sortByDesc('created_at') as $appoints)
             <tr align="center">
                 <td style="padding:10px; color:white;">
                     <p>{{ \Carbon\Carbon::parse($appoints->date)->format('F d, Y') }}</p>
@@ -114,7 +114,7 @@
                     <span class="text-sm">{{ $appoints->time ? \Carbon\Carbon::parse($appoints->time)->format('h:i A') : 'Waiting for approval...' }}</span>
                     @endif
                 </td>
-                <td style="padding:10px; color:white;">{{ $appoints->doctor }}</td>
+                <td style="padding:10px; color:{{ $appoints->doctor_id == null ? 'red;' : 'white;' }}">{{ $appoints->doctor->name ?? 'No doctor selected yet' }}</td>
                 <td style="padding:10px; color:
                     {{ $appoints->status == 'Canceled' ? 'red;' : '' }}
                     {{ $appoints->status == 'In progress' ? 'red;' : '' }}

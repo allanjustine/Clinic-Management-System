@@ -49,6 +49,7 @@
                             <option value="" selected hidden>Appointment For?</option>
                             <option disabled>Appointment For?</option>
                             <option value="My Self">My Self</option>
+                            <option value="My Self">My Spouse</option>
                             <option value="My Child">My Child</option>
                             <option value="My Sister">My Sister</option>
                             <option value="My Brother">My Brother</option>
@@ -66,13 +67,12 @@
 
                     <div class="col-12 py-2 wow fadeInLeft" data-wow-delay="300ms">
                         <label for="date">Select date of Appointment</label>
-                        <input type="date" name="date" class="form-control" value="{{ old('date') }}">
+                        <input type="date" id="date-input" name="date" class="form-control" value="{{ old('date') }}">
                         @error('date')
                         <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
-                <input type="text" value="{{ $doctorName->name }}" hidden name="doctor">
                 {{-- <div class="col-12 py-2 wow fadeInLeft" data-wow-delay="300ms">
                     <label for="doctor">Select Doctor</label>
                     <select name="doctor" id="" class="form-control">
@@ -129,3 +129,13 @@
     </form>
 </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date().toISOString().split('T')[0];
+        var dateInput = document.getElementById('date-input');
+        var datetimeInput = document.getElementById('datetime-input');
+
+        dateInput.setAttribute('min', today);
+        datetimeInput.setAttribute('min', today);
+    });
+</script>

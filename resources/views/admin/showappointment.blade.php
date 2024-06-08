@@ -37,6 +37,15 @@
                         {{ session()->get('message') }}
                     </div>
                     @endif
+                    @if (session()->has('error'))
+                    <div class="alert alert-danger mt-3">
+                        <button type="button" class="close" data-dismiss="alert">
+                            Cut
+                        </button>
+
+                        {{ session()->get('error') }}
+                    </div>
+                    @endif
                     @if(auth()->user()->id == 3)
                     <div class="d-flex justify-content-between">
                         <a href="#" class="btn btn-info float-end mb-3" data-bs-toggle="modal" data-bs-target="#add"><i class="mdi mdi-plus"></i> Add Patient Information</a>

@@ -16,7 +16,7 @@
                         </div>
                         <div class="body">
                             <p class="text-xl mb-0">{{ $doctors->name }}</p>
-                            <span class="text-sm text-grey">{{ $doctors->speciality }} speciality</span>
+                            <span class="text-sm text-grey">{{ $doctors->speciality }} Specialist</span>
                         </div>
                     </div>
                 </div>

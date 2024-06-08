@@ -94,7 +94,7 @@
         <x-jet-validation-errors class="mb-4 text-center" />
         <table class="table table-dark">
             <tr align="center">
-                <th style="padding:10px; font-size:20px; color:white;">Date</th>
+                <th style="padding:10px; font-size:20px; color:white;">Patients Details</th>
                 <th style="padding:10px; font-size:20px; color:white;">Time</th>
                 <th style="padding:10px; font-size:20px; color:white;">My Doctor</th>
                 <th style="padding:10px; font-size:20px; color:white;">Status</th>
@@ -105,6 +105,9 @@
             <tr align="center">
                 <td style="padding:10px; color:white;">
                     <p>{{ \Carbon\Carbon::parse($appoints->date)->format('F d, Y') }}</p>
+                    @if($appoints->appointment_for != 'My Self')
+                    <p> <strong>{{ $appoints->name }}</strong> </p>
+                    @endif
                     <p class="text-white italic text-sm">({{ $appoints->appointment_for }})</p>
                 </td>
                 <td style="padding:10px; color:white;">

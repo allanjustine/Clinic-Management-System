@@ -206,21 +206,21 @@ class AdminController extends Controller
         $phoneNumber = $data->phone;
         $adminNumber = auth()->user()->phone;
 
-        $sent = Nexmo::message()->send([
-            'to' => $phoneNumber,
-            'from' => $adminNumber,
-            'text' => 'Reminders! Hello Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and your appointment was successfully approved and your appointment schedule is on ' . \Carbon\Carbon::parse($data->date)->format('F d, Y') . ' at ' . \Carbon\Carbon::parse($data->time)->format('h:i A') .  ' Greetings FROM: ' . $data->doctor->name
-        ]);
+        // $sent = Nexmo::message()->send([
+        //     'to' => $phoneNumber,
+        //     'from' => $adminNumber,
+        //     'text' => 'Reminders! Hello Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and your appointment was successfully approved and your appointment schedule is on ' . \Carbon\Carbon::parse($data->date)->format('F d, Y') . ' at ' . \Carbon\Carbon::parse($data->time)->format('h:i A') .  ' Greetings FROM: ' . $data->doctor->name
+        // ]);
 
-        if ($sent['status'] == '0') {
+        // if ($sent['status'] == '0') {
 
-            $data->sms_status = true;
+        //     $data->sms_status = true;
             $data->save();
 
             return back()->with('message', 'Appointment was approved and message was sent successfully');
-        } else {
-            return back()->with('error', 'Failed to approve and send message. Please try again.');
-        };
+        // } else {
+        //     return back()->with('error', 'Failed to approve and send message. Please try again.');
+        // };
 
         return redirect()->back();
     }
@@ -240,7 +240,7 @@ class AdminController extends Controller
         $sent = Nexmo::message()->send([
             'to' => $phoneNumber,
             'from' => $adminNumber,
-            'text' => 'Good day! Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and we inform you that your appointment was rejected reason: ' . $data->reason . ' but you can request another appointment. Thank you! ' .  ' Greetings FROM: ' . $data->doctor->name
+            'text' => 'Good day! Mr/Mrs. ' . $data->name . ' this is from Espina Eye Care Clinic and we inform you that your appointment was rejected reason: ' . $data->reason . ' but you can request another appointment. Thank you! ' .  ' Greetings FROM: Doctors'
         ]);
 
         if ($sent['status'] == '0') {

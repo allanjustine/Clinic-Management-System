@@ -147,7 +147,7 @@
     </div>
 
     <div class="bg-light">
-        <div class="page-section py-3 mt-md-n5 custom-index">
+        {{-- <div class="page-section py-3 mt-md-n5 custom-index">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-4 py-3 py-md-0">
@@ -176,7 +176,7 @@
                     </div>
                 </div>
             </div>
-        </div> <!-- .page-section -->
+        </div> <!-- .page-section --> --}}
 
         <div class="page-section pb-0">
             <div class="container">

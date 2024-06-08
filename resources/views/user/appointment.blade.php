@@ -49,7 +49,7 @@
                             <option value="" selected hidden>Appointment For?</option>
                             <option disabled>Appointment For?</option>
                             <option value="My Self">My Self</option>
-                            <option value="My Self">My Spouse</option>
+                            <option value="My Spouse">My Spouse</option>
                             <option value="My Child">My Child</option>
                             <option value="My Sister">My Sister</option>
                             <option value="My Brother">My Brother</option>
